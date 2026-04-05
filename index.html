@@ -742,11 +742,11 @@
             // Card In Animation - Overlapping transition for smoothness
             tl.fromTo(nextCard,
                 { y: 100, opacity: 0, scale: 0.9 },
-                { 
-                    y: 0, 
-                    opacity: 1, 
-                    scale: 1, 
-                    duration: 0.8, 
+                {
+                    y: 0,
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.8,
                     ease: "back.out(1.2)",
                     onStart: () => {
                         nextCard.style.visibility = "visible";
@@ -756,9 +756,12 @@
                 "-=0.3" // Start 0.3s early
             );
 
-            // Add subtle reaction based on the question (Optimized with Opacity)
+            // Add subtle reaction - DELAYED to avoid lag during transition
             if (currentId === 5) {
-                gsap.to("#reaction-bg", { opacity: 1, duration: 2 });
+                // Wait for the card transition to finish (0.8s) then fade background
+                setTimeout(() => {
+                    gsap.to("#reaction-bg", { opacity: 1, duration: 1.5 });
+                }, 800);
             }
         }
 
