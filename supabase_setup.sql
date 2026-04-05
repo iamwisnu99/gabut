@@ -43,3 +43,18 @@ BEGIN
     WHERE name = row_name;
 END;
 $$ LANGUAGE plpgsql;
+
+-- 8. Menambahkan Kolom Rating (Realtime Community Rating)
+ALTER TABLE public.kegabutan_stats ADD COLUMN IF NOT EXISTS total_rating_sum DOUBLE PRECISION DEFAULT 0;
+ALTER TABLE public.kegabutan_stats ADD COLUMN IF NOT EXISTS rating_count BIGINT DEFAULT 0;
+
+-- 9. Buat fungsi database untuk Submit Rating secara atomik
+CREATE OR REPLACE FUNCTION submit_rating(new_val DOUBLE PRECISION) 
+RETURNS void AS $$
+BEGIN
+    UPDATE public.kegabutan_stats
+    SET total_rating_sum = COALESCE(total_rating_sum, 0) + new_val,
+        rating_count = COALESCE(rating_count, 0) + 1
+    WHERE name = 'total_scans';
+END;
+$$ LANGUAGE plpgsql;
