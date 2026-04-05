@@ -94,17 +94,19 @@
 
         .glass-card {
             background: var(--surface);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--border);
             border-radius: 2.5rem;
-            box-shadow: 0 40px 60px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
             width: 90%;
             max-width: 420px;
             padding: 3rem 2.5rem;
             position: absolute;
             visibility: hidden;
             opacity: 0;
+            will-change: transform, opacity;
+            backface-visibility: hidden;
         }
 
         .btn-primary {
@@ -721,7 +723,7 @@
             const progress = ((currentId + 1) / (totalSteps - 1)) * 100;
             gsap.to("#progress-bar", { width: `${progress}%`, duration: 0.5, ease: "power2.out" });
 
-            const tl = gsap.timeline();
+            const tl = gsap.timeline({ defaults: { force3D: true } });
 
             // Card Out Animation
             tl.to(currentCard, {
@@ -897,7 +899,7 @@
 
             if (!nextCard || !currentCard) return;
 
-            const tl = gsap.timeline();
+            const tl = gsap.timeline({ defaults: { force3D: true } });
             tl.to(currentCard, {
                 y: -100, opacity: 0, duration: 0.6, ease: "back.in(1.7)", onComplete: () => {
                     currentCard.style.visibility = "hidden";
