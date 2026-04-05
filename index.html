@@ -13,6 +13,12 @@
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+    <!-- Background Music -->
+    <audio id="bg-music" loop>
+        <source src="assets/music/Resident%20Evil%204%20Save%20Theme.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -103,11 +109,42 @@
             width: 0%;
             z-index: 100;
         }
+
+        /* Mute Toggle Style */
+        #mute-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #a855f7;
+            transition: all 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #mute-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body>
     <div id="progress-bar"></div>
     <div class="bg-gradient"></div>
+
+    <button id="mute-btn" onclick="toggleMute()">
+        <span id="mute-icon">🔊</span>
+    </button>
 
     <div id="app" class="relative w-full h-full flex items-center justify-center">
         
@@ -302,6 +339,17 @@
 
             if (!nextCard) return;
 
+            // Trigger Background Music & Fade In on first click
+            if (currentId === 0) {
+                const music = document.getElementById('bg-music');
+                music.volume = 0;
+                music.play().catch(e => console.warn("Autoplay ditolak browser:", e));
+                gsap.to(music, { volume: 0.4, duration: 4 }); // Fade-in volume halus
+                
+                // Show Mute Button
+                gsap.to("#mute-btn", { opacity: 1, pointerEvents: "auto", duration: 1 });
+            }
+
             // Update Progress Bar
             const progress = ((currentId + 1) / (totalSteps - 1)) * 100;
             gsap.to("#progress-bar", { width: `${progress}%`, duration: 0.5, ease: "power2.out" });
@@ -343,6 +391,20 @@
 
             // Animate button then proceed
             gsap.to(btn, { scale: 0.9, duration: 0.1, yoyo: true, repeat: 1, onComplete: () => nextCard(id) });
+        }
+
+        // --- AUDIO HELPERS ---
+        function toggleMute() {
+            const music = document.getElementById('bg-music');
+            const icon = document.getElementById('mute-icon');
+            
+            if (music.muted) {
+                music.muted = false;
+                icon.innerText = "🔊";
+            } else {
+                music.muted = true;
+                icon.innerText = "🔇";
+            }
         }
 
         // Initialize on load
