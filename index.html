@@ -317,6 +317,7 @@
     <!-- Main Container -->
     <div id="main-app" class="hidden w-full h-full flex items-center justify-center">
         <div id="progress-bar"></div>
+        <div id="reaction-bg" class="bg-gradient opacity-0" style="background: radial-gradient(circle at 50% 50%, rgba(220, 38, 38, 0.1) 0%, transparent 100%); z-index: -1;"></div>
         <div class="bg-gradient"></div>
 
         <div id="time-waster">
@@ -755,9 +756,9 @@
                 "-=0.3" // Start 0.3s early
             );
 
-            // Add subtle reaction based on the question
+            // Add subtle reaction based on the question (Optimized with Opacity)
             if (currentId === 5) {
-                gsap.to(".bg-gradient", { background: "radial-gradient(circle at 50% 50%, rgba(220, 38, 38, 0.05) 0%, rgba(248, 250, 252, 1) 100%)", duration: 2 });
+                gsap.to("#reaction-bg", { opacity: 1, duration: 2 });
             }
         }
 
