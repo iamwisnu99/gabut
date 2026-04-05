@@ -1,0 +1,16 @@
+[build]
+  # Direktori tempat Netlify Functions disimpan
+  functions = "netlify/functions"
+  
+  # Direktori root di-publish karena file index.html ada di sana
+  publish = "."
+
+[build.processing]
+  skip_processing = false
+
+[build.processing.html]
+  # Aktifkan pretty URL (menghilangkan .html dari URL)
+  pretty_urls = true
+
+# Opsional: Redirect semua traffic ke /.netlify/functions/ jika diinginkan, 
+# namun cukup panggil langsung dari frontend.
